@@ -10,6 +10,7 @@ import logging
 from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import Annotated, Any, Dict, List, Optional
+from dotenv import load_dotenv
 
 from langchain_core._api.beta_decorator import warn_beta
 
@@ -21,9 +22,12 @@ from langgraph.checkpoint.memory import MemorySaver
 from pydantic import BaseModel
 from websockets.exceptions import ConnectionClosed
 
+load_dotenv()
+
 
 # 현재 디렉토리를 Python 경로에 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../")
 
 # 1) Simple: basicConfig with filename
@@ -31,8 +35,6 @@ logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s %(levelname)-8s %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
-    filename="app_250820_1.log",  # ← writes all logs to this file
-    filemode="w",  # ← "w" to overwrite each run, "a" to append
 )
 
 logger = logging.getLogger(__name__)
@@ -182,17 +184,17 @@ def debug_log(message: str, level: str = "INFO"):
 def safe_import_modules(debug_log):
     """안전한 모듈 임포트 - Saju"""
     debug_log("📦 Saju 모듈 임포트 시작...")
-    try:
-        from Fortune.saju.graph import create_workflow
+    # try:
+    from Fortune.saju.graph import create_workflow
 
-        debug_log("✅ graph 임포트 성공")
-        return create_workflow, True
-    except ImportError as e:
-        debug_log(f"❌ graph 임포트 실패: {e}", "ERROR")
-        return None, False
-    except Exception as e:
-        debug_log(f"❌ graph 예상치 못한 오류: {e}", "ERROR")
-        return None, False
+    debug_log("✅ graph 임포트 성공")
+    return create_workflow, True
+    # except ImportError as e:
+    #     debug_log(f"❌ graph 임포트 실패: {e}", "ERROR")
+    #     return None, False
+    # except Exception as e:
+    #     debug_log(f"❌ graph 예상치 못한 오류: {e}", "ERROR")
+    #     return None, False
 
 
 def safe_import_tarot_modules(app, debug_log):
