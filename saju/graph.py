@@ -39,7 +39,10 @@ def create_workflow():
     conditional_map = {k: k for k in members}
     def get_next(state):
         return state["next"]
+    print("🔄 finish building Saju workflow graph")
     workflow.add_conditional_edges("supervisor", get_next, conditional_map)
     workflow.add_edge(START, "supervisor")
-    
-    return workflow.compile(checkpointer=MemorySaver())
+
+    compiled = workflow.compile(checkpointer=MemorySaver())
+    print("⚙️ finish compiling Saju workflow graph")
+    return compiled
